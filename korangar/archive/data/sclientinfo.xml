@@ -1,19 +1,23 @@
-<?xml version="1.0" encoding="euc-kr" ?>
+<?xml version="1.0" encoding="euc-kr"?>
 <clientinfo>
     <desc>Ragnarok Client Information</desc>
     <servicetype>korea</servicetype>
-    <servertype>sakray</servertype>
+    <servertype>primary</servertype>
+    <hideaccountlist />
+    <extendedslot />
     <readfolder />
     <connection>
-        <display>Korangar</display>
+        <display>MatiMil</display>
         <desc>Ragnarok Online</desc>
-        <balloon>Sakray Server</balloon>
-        <address>49.12.109.207</address>
+        <balloon>Nice</balloon>
+        <address>ragnarok.matimil.de</address>
         <port>6900</port>
-        <version>20</version>
+        <version>20220406</version>
         <langtype>1</langtype>
-        <yellow />
-        <aid />
+        <registrationweb>https://ragnarok.matimil.de/?module=account&action=create</registrationweb>
+        <yellow>
+            <admin>2000012</admin>
+        </yellow>
         <loading>
             <image>loading00.jpg</image>
         </loading>
