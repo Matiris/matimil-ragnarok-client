@@ -31,9 +31,14 @@ jobs:
             architecture: windows-x86_64
             install-deps: choco install nasm
             sed-command: sed -i
-          - name: MacOS
+          - name: MacOS-Arm
             os: macos-14
             architecture: macos-arm64
+            install-deps: brew install nasm
+            sed-command: sed -i ''
+          - name: MacOS-Intel
+            os: macos-13
+            architecture: macos-x86_64
             install-deps: brew install nasm
             sed-command: sed -i ''
 
@@ -69,7 +74,7 @@ jobs:
           ${{ matrix.sed-command }} "s#^version = .*#version = \"${{ env.VERSION }}\"#" korangar/Cargo.toml
 
       - name: Build binary
-        run: cargo build --release --features "unicode,debug"
+        run: cargo build --release --features "unicode"
 
       - name: Prepare release archive
         run: |
@@ -93,7 +98,7 @@ jobs:
           tar -czf "../archives/${{ env.ARTIFACT_NAME }}.tar.gz" *
 
       - name: Create archive (MacOS)
-        if: matrix.name == 'MacOS'
+        if: startsWith(matrix.name, 'MacOS')
         run: |
           cd staging
           zip -r "../archives/${{ env.ARTIFACT_NAME }}.zip" .
