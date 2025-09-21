@@ -10,6 +10,14 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install gdown
+        run: pip install gdown
 
       - name: Download data.grf
         run: gdown --id 1f1vH0BIJxraTS4EQN55UNSixomYjR2RE -O data.grf
