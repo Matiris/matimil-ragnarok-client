@@ -12,32 +12,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download data.grf
-        run: |
-          file_id="1f1vH0BIJxraTS4EQN55UNSixomYjR2RE"
-          file_name="data.grf"
-          wget --quiet --save-cookies /tmp/cookies.txt \
-               --keep-session-cookies --no-check-certificate \
-               "https://docs.google.com/uc?export=download&id=${file_id}" -O- \
-            | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > /tmp/confirm.txt
-          confirm=$(cat /tmp/confirm.txt)
-          wget --load-cookies /tmp/cookies.txt \
-               "https://docs.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" \
-               -O ${file_name}
-          rm -f /tmp/cookies.txt /tmp/confirm.txt
+        run: gdown --id 1f1vH0BIJxraTS4EQN55UNSixomYjR2RE -O data.grf
 
       - name: Download rdata.grf
-        run: |
-          file_id="1YZYsBkKwxcbzouRfXXomHI9bJzwtgjgK"
-          file_name="rdata.grf"
-          wget --quiet --save-cookies /tmp/cookies.txt \
-               --keep-session-cookies --no-check-certificate \
-               "https://docs.google.com/uc?export=download&id=${file_id}" -O- \
-            | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > /tmp/confirm.txt
-          confirm=$(cat /tmp/confirm.txt)
-          wget --load-cookies /tmp/cookies.txt \
-               "https://docs.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" \
-               -O ${file_name}
-          rm -f /tmp/cookies.txt /tmp/confirm.txt
+        run: gdown --id 1YZYsBkKwxcbzouRfXXomHI9bJzwtgjgK -O rdata.grf
       
       - name: Download Windows zip from release
         env:
