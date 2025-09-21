@@ -26,12 +26,14 @@ jobs:
           curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > /dev/null
           confirm=$(awk '/download/ {print $NF}' ./cookie)
           curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
-
+        
       - name: Download Windows zip from release
         run: |
-          curl -L -o client.zip \
-            https://github.com/Matiris/matimil-ragnarok-client/releases/download/20250919-korangar-v0.1.0/20250919-korangar-v0.1.0-windows-x86_64.zip
-
+          gh release download 20250919-korangar-v0.1.0 \
+            --pattern "20250919-korangar-v0.1.0-windows-x86_64.zip" \
+            --repo Matiris/matimil-ragnarok-client
+          mv 20250919-korangar-v0.1.0-windows-x86_64.zip client.zip
+          
       - name: Extract client zip
         run: unzip client.zip -d extracted
 
