@@ -28,6 +28,8 @@ jobs:
           curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
         
       - name: Download Windows zip from release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release download 20250919-korangar-v0.1.0 \
             --pattern "20250919-korangar-v0.1.0-windows-x86_64.zip" \
