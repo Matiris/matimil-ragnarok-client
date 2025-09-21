@@ -1,0 +1,55 @@
+name: Build Custom Ragnarok Client
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download data.grf from Google Drive
+        run: |
+          file_id="1f1vH0BIJxraTS4EQN55UNSixomYjR2RE"
+          file_name="data.grf"
+          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > /dev/null
+          confirm=$(awk '/download/ {print $NF}' ./cookie)
+          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
+
+      - name: Download rdata.grf from Google Drive
+        run: |
+          file_id="1YZYsBkKwxcbzouRfXXomHI9bJzwtgjgK"
+          file_name="rdata.grf"
+          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > /dev/null
+          confirm=$(awk '/download/ {print $NF}' ./cookie)
+          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
+
+      - name: Download Windows zip from release
+        run: |
+          curl -L -o client.zip \
+            https://github.com/Matiris/matimil-ragnarok-client/releases/download/20250919-korangar-v0.1.0/20250919-korangar-v0.1.0-windows-x86_64.zip
+
+      - name: Extract client zip
+        run: unzip client.zip -d extracted
+
+      - name: Prepare final package
+        run: |
+          mkdir -p package
+          cp extracted/korangar.exe package/
+          cp data.grf package/
+          cp rdata.grf package/
+          cp -r extracted/archive package/archive
+
+      - name: Create final zip
+        run: |
+          cd package
+          zip -r ../korangar-client-complete.zip .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: korangar-client-complete
+          path: korangar-client-complete.zip
