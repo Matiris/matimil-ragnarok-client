@@ -11,22 +11,34 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download data.grf from Google Drive
+      - name: Download data.grf
         run: |
           file_id="1f1vH0BIJxraTS4EQN55UNSixomYjR2RE"
           file_name="data.grf"
-          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > /dev/null
-          confirm=$(awk '/download/ {print $NF}' ./cookie)
-          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
+          wget --quiet --save-cookies /tmp/cookies.txt \
+               --keep-session-cookies --no-check-certificate \
+               "https://docs.google.com/uc?export=download&id=${file_id}" -O- \
+            | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > /tmp/confirm.txt
+          confirm=$(cat /tmp/confirm.txt)
+          wget --load-cookies /tmp/cookies.txt \
+               "https://docs.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" \
+               -O ${file_name}
+          rm -f /tmp/cookies.txt /tmp/confirm.txt
 
-      - name: Download rdata.grf from Google Drive
+      - name: Download rdata.grf
         run: |
           file_id="1YZYsBkKwxcbzouRfXXomHI9bJzwtgjgK"
           file_name="rdata.grf"
-          curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id=${file_id}" > /dev/null
-          confirm=$(awk '/download/ {print $NF}' ./cookie)
-          curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" -o ${file_name}
-        
+          wget --quiet --save-cookies /tmp/cookies.txt \
+               --keep-session-cookies --no-check-certificate \
+               "https://docs.google.com/uc?export=download&id=${file_id}" -O- \
+            | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > /tmp/confirm.txt
+          confirm=$(cat /tmp/confirm.txt)
+          wget --load-cookies /tmp/cookies.txt \
+               "https://docs.google.com/uc?export=download&confirm=${confirm}&id=${file_id}" \
+               -O ${file_name}
+          rm -f /tmp/cookies.txt /tmp/confirm.txt
+      
       - name: Download Windows zip from release
         env:
           GH_TOKEN: ${{ github.token }}
