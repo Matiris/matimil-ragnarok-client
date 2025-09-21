@@ -31,8 +31,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download --repo Matiris/matimil-ragnarok-client \
-            --tag 20250919-korangar-v0.1.0 \
+          gh release download 20250919-korangar-v0.1.0 \
+            --repo Matiris/matimil-ragnarok-client \
             --pattern "*windows-x86_64.zip"
           mv *windows-x86_64.zip client.zip
           
